@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EtudiantService, Etudiant } from 'src/app/services/etudiant.service';
 import { DatePipe } from '@angular/common';
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [CommonModule, NgbModule, FormsModule, ReactiveFormsModule]   // Add FormsModule here
 })
-export class DefaultComponent {
+export class DefaultComponent implements AfterViewInit {
   @ViewChild('studentModal') studentModal!: TemplateRef<any>;
   etudiants: Etudiant[] = [];
   filteredEtudiants: Etudiant[] = [];
@@ -32,7 +32,6 @@ export class DefaultComponent {
     private datePipe: DatePipe,
     private fb: FormBuilder
   ) {
-
     // Initialize form with validators
     this.studentForm = this.fb.group({
       nomEtudiant: ['', Validators.required],
@@ -43,6 +42,11 @@ export class DefaultComponent {
       ],
       dateNaissance: ['', Validators.required]
     });
+  }
+
+  ngAfterViewInit(): void {
+    // Ensures the modal is available after view initialization
+    console.log(this.studentModal); // This should not be null now
   }
 
   ngOnInit(): void {
@@ -77,13 +81,21 @@ export class DefaultComponent {
   openAddStudentModal() {
     this.addStudentMode = true;
     this.resetSelectedEtudiant();
-    this.modalService.open(this.studentModal, { ariaLabelledBy: 'modal-basic-title' });
+    if (this.studentModal) {
+      this.modalService.open(this.studentModal, { ariaLabelledBy: 'modal-basic-title' });
+    } else {
+      console.error('Modal template is not available.');
+    }
   }
 
   openEditStudentModal(etudiant: Etudiant) {
     this.addStudentMode = false;
     this.selectedEtudiant = { ...etudiant };
-    this.modalService.open(this.studentModal, { ariaLabelledBy: 'modal-basic-title' });
+    if (this.studentModal) {
+      this.modalService.open(this.studentModal, { ariaLabelledBy: 'modal-basic-title' });
+    } else {
+      console.error('Modal template is not available.');
+    }
   }
 
   resetSelectedEtudiant(): void {
@@ -166,7 +178,6 @@ export class DefaultComponent {
     });
   }
 
-
   onFileChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -202,7 +213,6 @@ export class DefaultComponent {
       }
     });
   }
-
 
   resetModal(): void {
     this.resetSelectedEtudiant();
