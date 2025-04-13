@@ -122,7 +122,7 @@ export class DefaultComponent implements AfterViewInit {
     }
 
     const formData = this.studentForm.value;
-    formData.dateNaissance = this.datePipe.transform(formData.dateNaissance, 'dd/MM/yyyy');
+    formData.dateNaissance = this.datePipe.transform(formData.dateNaissance, 'yyyy-MM-dd');
 
     this.etudiantService.addEtudiant(formData).subscribe(
       () => {
