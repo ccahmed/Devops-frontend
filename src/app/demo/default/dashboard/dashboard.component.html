@@ -1,0 +1,84 @@
+<div class="container">
+  <!-- Button to trigger Add Student Modal -->
+  <input
+    type="text"
+    class="form-control mb-3"
+    placeholder="Search by name..."
+    [(ngModel)]="searchQuery"
+    (input)="onSearchQueryChange()"
+  />
+  <button class="btn btn-success my-3" (click)="openAddStudentModal()">
+    <i class="fas fa-user-plus"></i> Add Student
+  </button>
+
+  <!-- Students Table -->
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>CIN</th>
+        <th>Birth Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let etudiant of filteredEtudiants">
+        <td>{{ etudiant.nomEtudiant }}</td>
+        <td>{{ etudiant.prenomEtudiant }}</td>
+        <td>{{ etudiant.cinEtudiant }}</td>
+        <td>{{ etudiant.dateNaissance | date: 'yyyy-MM-dd' }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" (click)="openEditStudentModal(etudiant)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteEtudiant(etudiant.idEtudiant)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal for Adding/Editing Student -->
+  <ng-template #studentModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">{{ addStudentMode ? 'Add Student' : 'Edit Student' }}</h5>
+      <button type="button" class="close" aria-label="Close" (click)="resetModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="studentForm">
+        <div class="form-group">
+          <label for="nomEtudiant">Name</label>
+          <input type="text" id="nomEtudiant" class="form-control" formControlName="nomEtudiant">
+          <div *ngIf="studentForm.get('nomEtudiant')?.invalid && studentForm.get('nomEtudiant')?.touched" class="text-danger">
+            Name is required.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="prenomEtudiant">Surname</label>
+          <input type="text" id="prenomEtudiant" class="form-control" formControlName="prenomEtudiant">
+          <div *ngIf="studentForm.get('prenomEtudiant')?.invalid && studentForm.get('prenomEtudiant')?.touched" class="text-danger">
+            Surname is required.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cinEtudiant">CIN</label>
+          <input type="text" id="cinEtudiant" class="form-control" formControlName="cinEtudiant">
+          <div *ngIf="studentForm.get('cinEtudiant')?.invalid && studentForm.get('cinEtudiant')?.touched" class="text-danger">
+            CIN must be 8 digits.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="dateNaissance">Birth Date</label>
+          <input type="date" id="dateNaissance" class="form-control" formControlName="dateNaissance">
+          <div *ngIf="studentForm.get('dateNaissance')?.invalid && studentForm.get('dateNaissance')?.touched" class="text-danger">
+            Date of Birth is required.
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="resetModal()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="addStudentMode ? addEtudiant() : updateEtudiant()">{{ addStudentMode ? 'Add' : 'Update' }}</button>
+    </div>
+  </ng-template>
+</div>
