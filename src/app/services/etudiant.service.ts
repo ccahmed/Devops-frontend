@@ -30,25 +30,12 @@ export class EtudiantService {
   }
 
   addEtudiant(etudiant: Etudiant): Observable<any> {
-    let params = new HttpParams()
-      .set('nomEtudiant', etudiant.nomEtudiant)
-      .set('prenomEtudiant', etudiant.prenomEtudiant)
-      .set('cinEtudiant', etudiant.cinEtudiant)
-      .set('dateNaissance', etudiant.dateNaissance)
-      .set('profilePicture', etudiant.profilePicture || '');
-
-    return this.http.post(`${this.baseUrl}/add-etudiant`, {}, { params });
+    return this.http.post(`${this.baseUrl}/add-etudiant`, etudiant);
   }
+  
 
 
   modifyEtudiant(id: number, etudiant: Etudiant): Observable<Etudiant> {
-    let params = new HttpParams()
-      .set('nomEtudiant', etudiant.nomEtudiant)
-      .set('prenomEtudiant', etudiant.prenomEtudiant)
-      .set('cinEtudiant', etudiant.cinEtudiant)
-      .set('dateNaissance', etudiant.dateNaissance)
-      .set('profilePicture', etudiant.profilePicture || '');
-
-    return this.http.put<Etudiant>(`${this.baseUrl}/modify-etudiant/${id}`, {}, { params });
+    return this.http.put<Etudiant>(`${this.baseUrl}/modify-etudiant`, etudiant);
   }
-}
+}  
