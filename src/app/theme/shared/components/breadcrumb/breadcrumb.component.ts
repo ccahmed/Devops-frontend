@@ -61,7 +61,7 @@ export class BreadcrumbComponent {
         const breadcrumbList = this.filterNavigation(this.navigations, activeLink);
         this.navigationList = breadcrumbList;
         const title = breadcrumbList[breadcrumbList.length - 1]?.title || 'Arsi';
-        this.titleService.setTitle(title + ' | Arsi DevOps');
+        this.titleService.setTitle(title + ' | Ahmed Hmid');
       }
     });
   }
